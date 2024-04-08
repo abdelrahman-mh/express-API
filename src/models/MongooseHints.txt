@@ -1,0 +1,5 @@
+If any method fails, what he will do?
+
+FindAndUpdate                       => null
+findById                            => null
+await model.save()                  => throw error if validation field or duplication key also

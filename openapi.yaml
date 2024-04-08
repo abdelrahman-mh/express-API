@@ -1,0 +1,664 @@
+openapi: 3.1.0
+info:
+  title: Notes API
+  description: API for managing a notes app
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+    description: Main server
+
+paths:
+  /signup:
+    post:
+      summary: User Sign-Up
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUpCredential'
+      responses:
+        '201':
+          description: User created successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /login:
+    post:
+      summary: User Login
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginCredential'
+      responses:
+        '200':
+          description: User logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: JWT token for authentication
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /notes:
+    get:
+      summary: Get all notes
+      tags: [Notes]
+      security:
+        - jwtAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Note'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      summary: Create a new note
+      tags: [Notes]
+      security:
+        - jwtAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewNote'
+      responses:
+        '201':
+          description: Note created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /notes/{id}:
+    get:
+      summary: Retrieve a note by ID
+      tags: [Notes]
+      security:
+        - jwtAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the note to retrieve
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      summary: Update a note
+      tags: [Notes]
+      security:
+        - jwtAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the note to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateNote'
+      responses:
+        '200':
+          description: Note updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      summary: Delete a note
+      tags: [Notes]
+      security:
+        - jwtAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the note to delete
+      responses:
+        '204':
+          description: Note deleted successfully
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /notes/{id}/complete:
+    post:
+      summary: Mark a note as complete
+      tags: [Notes]
+      security:
+        - jwtAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the note to mark as complete
+      responses:
+        '200':
+          description: Note marked as complete successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  completed:
+                    type: boolean
+                    description: Indicates whether the note is completed or not
+                required:
+                  - completed
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /notes/{id}/unComplete:
+    post:
+      summary: Mark a note as incomplete
+      tags: [Notes]
+      security:
+        - jwtAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID of the note to mark as incomplete
+      responses:
+        '200':
+          description: Note marked as incomplete successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  completed:
+                    type: boolean
+                    description: Indicates whether the note is completed or not
+                required:
+                  - completed
+
+  /users:
+    post:
+      summary: Create a new user
+      tags: [Users]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUser'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    get:
+      summary: Get rows users
+      tags: [Users]
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+        - in: query
+          name: role
+          schema:
+            type: string
+        - in: query
+          name: sortBy
+          schema:
+            type: string
+        - in: query
+          name: projectBy
+          schema:
+            type: string
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: page
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: success get users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /users/{id}:
+    get:
+      summary: Retrieve a user by ID
+      tags: [Users]
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: ID of the user to retrieve
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      summary: Update a user
+      tags: [Users]
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: ID of the user to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      summary: Delete a user
+      description: Deletes the user identified by the userId parameter.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID of the user to delete
+          schema:
+            type: string
+      responses:
+        '204':
+          description: User deleted successfully
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  schemas:
+    SignUpCredential:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: john@example.com
+          description: Email address of the user
+        password:
+          type: string
+          example: Test-$1234
+          description: Password of the user
+      required:
+        - email
+        - password
+
+    LoginCredential:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: john@example.com
+          description: Email address of the user
+        password:
+          type: string
+          example: Test-$1234
+          description: Password of the user
+      required:
+        - email
+        - password
+
+    Note:
+      type: object
+      properties:
+        id:
+          type: string
+          format: objectId
+          example: 507f191e810c19729de860ea
+          description: Unique identifier for the note
+        userId:
+          type: objectId
+          example: 507f191e810c19729de860ea
+          description: ID of the user who owns the note
+        content:
+          type: string
+          example: Create app with Docker and docker-compose
+          description: Content of the note
+        completed:
+          type: boolean
+          example: true
+          description: Indicates whether the note is completed
+        createdAt:
+          type: string
+          format: date-time
+          example: '2022-04-05T10:15:30Z'
+          description: Date and time when the note was created
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2022-04-05T10:15:30Z'
+          description: Date and time when the note was last updated
+      required:
+        - id
+        - userId
+        - content
+        - completed
+        - createdAt
+        - updatedAt
+
+    NewNote:
+      type: object
+      properties:
+        content:
+          type: string
+          description: Content of the new note
+      required:
+        - content
+
+    UpdateNote:
+      type: object
+      properties:
+        content:
+          type: string
+          description: New content of the note
+        completed:
+          type: boolean
+          description: New completion status of the note
+
+    NewUser:
+      type: object
+      properties:
+        name:
+          type: string
+          example: John Due
+          description: Name of the user
+        email:
+          type: string
+          format: email
+          example: john@example.com
+          description: Email address of the user
+        password:
+          type: string
+          example: Test-$$123
+          description: Password of the user
+      required:
+        - name
+        - email
+        - password
+
+    UpdateUser:
+      type: object
+      properties:
+        name:
+          type: string
+          example: John Due
+          description: New name of the user
+        password:
+          type: string
+          example: Test-$$123
+          description: New password of the user
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: objectId
+          example: 507f191e810c19729de860ea
+          description: Unique identifier for the user
+        name:
+          type: string
+          example: John Due
+          description: Name of the user
+        email:
+          type: string
+          format: email
+          example: john@example.com
+          description: Email address of the user
+        createdAt:
+          type: string
+          format: date-time
+          example: '2022-04-05T10:15:30Z'
+          description: Date and time when the user was created
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2022-04-05T10:15:30Z'
+          description: Date and time when the user was last updated
+      required:
+        - id
+        - name
+        - email
+        - createdAt
+        - updatedAt
+
+    BaseError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Error type
+        message:
+          type: string
+          example: Error message
+      required:
+        - error
+
+    DetailsError:
+      type: object
+      properties:
+        field:
+          type: string
+          example: fieldName
+        message:
+          type: string
+          example: This field already exist!.
+      required:
+        - field
+        - message
+
+  responses:
+    BadRequest:
+      description: Bad request error
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/BaseError'
+              - type: object
+                properties:
+                  details:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DetailsError'
+                required:
+                  - details
+
+    AuthenticationError:
+      description: Authentication failed error
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/BaseError'
+
+    AuthorizationError:
+      description: Authorization error
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/BaseError'
+
+    ConflictError:
+      description: Conflict Error
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/BaseError'
+              - type: object
+                properties:
+                  details:
+                    $ref: '#/components/schemas/DetailsError'
+                required:
+                  - details
+    ResourceNotFoundError:
+      description: Resource not found error
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/BaseError'
+              - type: object
+                properties:
+                  resource:
+                    type: string
+                    example: resourceType
+
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/BaseError'
+
+    RateLimitExceededError:
+      description: Rate limit exceeded error
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/BaseError'
+              - type: object
+                properties:
+                  retryAfter:
+                    type: string
+                    example: timestamp or duration
+
+    MaintenanceModeError:
+      description: Maintenance mode error
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/BaseError'
+              - type: object
+                properties:
+                  estimatedEndTime:
+                    type: string
+                    example: timestamp
+
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

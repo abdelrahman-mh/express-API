@@ -1,0 +1,113 @@
+BadRequest:
+  type: object
+  properties:
+    error:
+      type: object
+      properties:
+        type:
+          type: string
+          example: BadRequest
+        message:
+          type: string
+          example: validation fields or invalid body data
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                example: fieldName
+              message:
+                type: string
+                example: Validation error message for the field.
+AuthenticationError:
+  type: object
+  properties:
+    error:
+      type: object
+      properties:
+        type:
+          type: string
+          example: AuthenticationError
+        message:
+          type: string
+          example: Authentication failed. Please check your credentials.
+AuthorizationError:
+  type: object
+  properties:
+    error:
+      type: object
+      properties:
+        type:
+          type: string
+          example: AuthorizationError
+        message:
+          type: string
+          example: You are not authorized to perform this action.
+ResourceNotFoundError:
+  type: object
+  properties:
+    error:
+      type: object
+      properties:
+        type:
+          type: string
+          example: ResourceNotFoundError
+        message:
+          type: string
+          example: The requested resource was not found.
+        resource:
+          type: string
+          example: resourceType
+        identifier:
+          type: string
+          example: resourceIdentifier
+InternalServerError:
+  type: object
+  properties:
+    error:
+      type: object
+      properties:
+        type:
+          type: string
+          example: InternalServerError
+        message:
+          type: string
+          example: An unexpected error occurred on the server.
+        code:
+          type: string
+          example: errorCode
+        details:
+          type: string
+          example: Additional error details if available
+RateLimitExceededError:
+  type: object
+  properties:
+    error:
+      type: object
+      properties:
+        type:
+          type: string
+          example: RateLimitExceededError
+        message:
+          type: string
+          example: You have exceeded the rate limit for this operation. Please try again later.
+        retryAfter:
+          type: string
+          example: timestamp or duration
+MaintenanceModeError:
+  type: object
+  properties:
+    error:
+      type: object
+      properties:
+        type:
+          type: string
+          example: MaintenanceModeError
+        message:
+          type: string
+          example: The server is currently undergoing maintenance. Please try again later.
+        estimatedEndTime:
+          type: string
+          example: timestamp
