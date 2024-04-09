@@ -38,7 +38,17 @@ export default class BadRequestError extends CustomError {
   private readonly _logging: boolean = false;
   private readonly _details: components['schemas']['DetailsError'];
 
-  constructor({ code = BadRequestError._statusCode, message = 'Bad request', logging = false, details }: { code?: number; message?: string; logging?: boolean; details: components['schemas']['DetailsError'] }) {
+  constructor({
+    code = BadRequestError._statusCode,
+    message = 'Bad request',
+    logging = false,
+    details,
+  }: {
+    code?: number;
+    message?: string;
+    logging?: boolean;
+    details: components['schemas']['DetailsError'];
+  }) {
     super(message);
     this._code = code;
     this._logging = logging;

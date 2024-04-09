@@ -4,16 +4,17 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "airbnb-base",
+    "plugin:prettier/recommended",
     "airbnb-typescript/base",
     "plugin:jest/recommended",
-    "plugin:security/recommended"
+    "plugin:security/recommended",
   ],
   "plugins": ["@typescript-eslint", "jest", "security", "prettier"],
   "env": {
     "browser": true,
     "es6": true,
     "node": true,
-    "jest/globals": true
+    "jest/globals": true,
   },
   "rules": {
     "@typescript-eslint/semi": ["error"],
@@ -24,10 +25,12 @@
     "@typescript-eslint/no-unsafe-member-access": "off",
     "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "@typescript-eslint/no-explicit-any": "error",
-    "@typescript-eslint/ban-types": "off"
+    "@typescript-eslint/ban-types": "off",
+    "max-len": ["error", { "code": 150, "ignoreUrls": true }],
+    "prettier/prettier": "error"
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "./tsconfig.json"
-  }
+    "project": "./tsconfig.json",
+  },
 }

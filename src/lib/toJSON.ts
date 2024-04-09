@@ -1,3 +1,8 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable consistent-return */
+/* eslint-disable security/detect-object-injection */
+/* eslint-disable no-param-reassign */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Document } from 'mongoose';
 
 /**
@@ -8,7 +13,6 @@ import { Document } from 'mongoose';
 
 const deleteAtPath = (obj: any, path: any, index: number) => {
   if (index === path.length - 1) {
-    // eslint-disable-next-line no-param-reassign
     delete obj[path[index]];
     return;
   }
@@ -18,11 +22,9 @@ const deleteAtPath = (obj: any, path: any, index: number) => {
 const toJSON = (schema: any) => {
   let transform: Function;
   if (schema.options.toJSON && schema.options.toJSON.transform) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     transform = schema.options.toJSON.transform;
   }
 
-  // eslint-disable-next-line no-param-reassign
   schema.options.toJSON = Object.assign(schema.options.toJSON || {}, {
     transform(doc: Document, ret: any, options: Record<string, any>) {
       Object.keys(schema.paths).forEach((path) => {

@@ -206,7 +206,7 @@ paths:
                 type: object
                 properties:
                   completed:
-                    type: boolean
+                    type: string
                     description: Indicates whether the note is completed or not
                 required:
                   - completed
@@ -238,12 +238,18 @@ paths:
               schema:
                 type: object
                 properties:
-                  completed:
-                    type: boolean
+                  cancel_complete:
+                    type: string
                     description: Indicates whether the note is completed or not
                 required:
-                  - completed
-
+                  - cancel_complete
+      '401':
+        $ref: '#/components/responses/AuthenticationError'
+      '404':
+        $ref: '#/components/responses/ResourceNotFoundError'
+      '500':
+        $ref: '#/components/responses/InternalServerError'
+        
   /users:
     post:
       summary: Create a new user
@@ -544,12 +550,13 @@ components:
       properties:
         error:
           type: string
-          example: Error type
+          example: The HTTP status message
         message:
           type: string
-          example: Error message
+          example: The ERROR message
       required:
         - error
+        - message
 
     DetailsError:
       type: object
@@ -562,7 +569,6 @@ components:
           example: This field already exist!.
       required:
         - field
-        - message
 
   responses:
     BadRequest:
@@ -574,12 +580,12 @@ components:
               - $ref: '#/components/schemas/BaseError'
               - type: object
                 properties:
-                  details:
+                  data:
                     type: array
                     items:
                       $ref: '#/components/schemas/DetailsError'
                 required:
-                  - details
+                  - data
 
     AuthenticationError:
       description: Authentication failed error
@@ -606,10 +612,13 @@ components:
               - $ref: '#/components/schemas/BaseError'
               - type: object
                 properties:
-                  details:
-                    $ref: '#/components/schemas/DetailsError'
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DetailsError'
                 required:
-                  - details
+                  - data
+
     ResourceNotFoundError:
       description: Resource not found error
       content:
@@ -618,10 +627,6 @@ components:
             allOf:
               - $ref: '#/components/schemas/BaseError'
               - type: object
-                properties:
-                  resource:
-                    type: string
-                    example: resourceType
 
     InternalServerError:
       description: Internal server error
@@ -640,22 +645,6 @@ components:
               - $ref: '#/components/schemas/BaseError'
               - type: object
                 properties:
-                  retryAfter:
-                    type: string
-                    example: timestamp or duration
-
-    MaintenanceModeError:
-      description: Maintenance mode error
-      content:
-        application/json:
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/BaseError'
-              - type: object
-                properties:
-                  estimatedEndTime:
-                    type: string
-                    example: timestamp
 
   securitySchemes:
     jwtAuth:

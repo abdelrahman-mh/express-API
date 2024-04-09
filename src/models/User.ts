@@ -1,19 +1,16 @@
-import mongoose, { model, Schema, Document } from 'mongoose';
+import mongoose, { model, Model, Schema } from 'mongoose';
 import { hashPassword } from '../utils/helper';
 import toJSON from '../lib/toJSON';
 import bcrypt from 'bcrypt';
+import { UserDocument } from '../types/main';
 
-// Assuming NewUserDocument extends Document and includes custom fields.
-interface NewUserDocument extends Document {
-  username: string;
-  email: string;
-  password: string;
-  // Add any other user specific fields here.
+interface UserModel extends Model<UserDocument, UserModel> {
+  isEmailTaken(email: string, excludeUserId?: mongoose.Types.ObjectId): Promise<boolean>;
 }
 
-const userSchema = new Schema<NewUserDocument>(
+const userSchema = new Schema<UserDocument>(
   {
-    username: { type: String, required: true, unique: true },
+    name: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
   },
@@ -48,6 +45,6 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-const UserModel = model<NewUserDocument>('User', userSchema);
+const UserModel = model<UserDocument, UserModel>('User', userSchema);
 
 export default UserModel;

@@ -1,14 +1,15 @@
 import dotenv from 'dotenv';
-dotenv.config();
 import express from 'express';
+import morgan from 'morgan';
+import swaggerUi from 'swagger-ui-express';
 import notesRoutes from './routes/noteRoutes';
+import apiDocsRoute from './routes/docs.router';
 // import usersRoutes from './routes/userRoutes';
 // import authRoutes from './routes/authRoutes';
 // import errorHandler from './middlewares/errorMiddleware';
-import authMiddleware from './middlewares/authMiddleware';
-import morgan from 'morgan';
-import swaggerUi from 'swagger-ui-express';
-import apiDocsRoute from './routes/docs.router';
+// import authMiddleware from './middlewares/authMiddleware';
+
+dotenv.config();
 const app = express();
 
 // middleware
@@ -18,7 +19,7 @@ app.use('/docs', swaggerUi.serve);
 
 // routes
 app.use(apiDocsRoute);
-app.use('/api/notes',authMiddleware, notesRoutes);
+app.use('/api/notes', notesRoutes);
 // app.use('/api/users', usersRoutes);
 // app.use('/api/auth', authRoutes);
 

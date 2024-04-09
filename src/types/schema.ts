@@ -283,7 +283,7 @@ export interface paths {
                     content: {
                         "application/json": {
                             /** @description Indicates whether the note is completed or not */
-                            completed: boolean;
+                            completed: string;
                         };
                     };
                 };
@@ -328,7 +328,7 @@ export interface paths {
                     content: {
                         "application/json": {
                             /** @description Indicates whether the note is completed or not */
-                            completed: boolean;
+                            cancel_complete: string;
                         };
                     };
                 };
@@ -549,7 +549,7 @@ export interface components {
              * @description ID of the user who owns the note
              * @example 507f191e810c19729de860ea
              */
-            userId: Record<string, unknown>;
+            userId: Record<string, never>;
             /**
              * @description Content of the note
              * @example Create app with Docker and docker-compose
@@ -645,16 +645,16 @@ export interface components {
             updatedAt: string;
         };
         BaseError: {
-            /** @example Error type */
+            /** @example The HTTP status message */
             error: string;
-            /** @example Error message */
-            message?: string;
+            /** @example The ERROR message */
+            message: string;
         };
         DetailsError: {
             /** @example fieldName */
             field: string;
             /** @example This field already exist!. */
-            message: string;
+            message?: string;
         };
     };
     responses: {
@@ -665,7 +665,7 @@ export interface components {
             };
             content: {
                 "application/json": components["schemas"]["BaseError"] & {
-                    details: components["schemas"]["DetailsError"][];
+                    data: components["schemas"]["DetailsError"][];
                 };
             };
         };
@@ -694,7 +694,7 @@ export interface components {
             };
             content: {
                 "application/json": components["schemas"]["BaseError"] & {
-                    details: components["schemas"]["DetailsError"];
+                    data: components["schemas"]["DetailsError"][];
                 };
             };
         };
@@ -704,10 +704,7 @@ export interface components {
                 [name: string]: unknown;
             };
             content: {
-                "application/json": components["schemas"]["BaseError"] & {
-                    /** @example resourceType */
-                    resource?: string;
-                };
+                "application/json": components["schemas"]["BaseError"] & Record<string, never>;
             };
         };
         /** @description Internal server error */
@@ -725,22 +722,7 @@ export interface components {
                 [name: string]: unknown;
             };
             content: {
-                "application/json": components["schemas"]["BaseError"] & {
-                    /** @example timestamp or duration */
-                    retryAfter?: string;
-                };
-            };
-        };
-        /** @description Maintenance mode error */
-        MaintenanceModeError: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": components["schemas"]["BaseError"] & {
-                    /** @example timestamp */
-                    estimatedEndTime?: string;
-                };
+                "application/json": components["schemas"]["BaseError"] & Record<string, never>;
             };
         };
     };

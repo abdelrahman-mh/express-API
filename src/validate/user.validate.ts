@@ -1,27 +1,56 @@
-import Joi from 'joi';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { z } from 'zod';
+import { RequestDataAsync } from '../types/main';
+import { objectId, password } from './custom.validate';
 
-export const userValidator = Joi.object({
-  username: Joi.string().alphanum().min(3).max(30).required().messages({
-    'string.base': 'Username must be a string',
-    'string.empty': 'Username is required',
-    'string.min': 'Username must have at least {#limit} characters',
-    'string.max': 'Username cannot exceed {#limit} characters',
-    'any.required': 'Username is required',
-  }),
-  email: Joi.string().email().required().messages({
-    'string.base': 'Email must be a string',
-    'string.email': 'Email must be a valid email address',
-    'string.empty': 'Email is required',
-    'any.required': 'Email is required',
-  }),
-  password: Joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$')).required().messages({
-    'string.base': 'Password must be a string',
-    'string.pattern.base': 'Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, and one number',
-    'string.empty': 'Password is required',
-    'any.required': 'Password is required',
-  }),
-}).options({ stripUnknown: true, abortEarly: false }); // abortEarly for return all field errors - stripUnknown for make it not process unknown data
+const UserSchema = z.object({
+  name: z.string().min(4, { message: 'name must be at least 4 characters long' }),
+  email: z.string().email({ message: 'Invalid email' }),
+  password,
+});
 
-export const updateUserValidator = Joi.object({
-  password: userValidator.extract('title'),
-}).options({ stripUnknown: true, abortEarly: false });
+const UpdateUserSchema = UserSchema.omit({ email: true });
+
+const GetUsersQuery = z.object({
+  name: z.string().optional(),
+  role: z.string().optional(),
+  sortBy: z.string().optional(),
+  projectBy: z.string().optional(),
+  limit: z.number().int().optional(),
+  page: z.number().int().optional(),
+});
+
+export const createUser = async (req: { body: unknown }): Promise<RequestDataAsync<'/users', 'post'>> => ({
+  body: await UserSchema.parseAsync(req.body),
+  params: undefined,
+  query: undefined,
+});
+
+export const getUsers = async (req: { query: unknown }): Promise<RequestDataAsync<'/users', 'get'>> => ({
+  body: undefined,
+  params: undefined,
+  query: await GetUsersQuery.parseAsync(req.query),
+});
+
+export const getUser = async (req: { params: { userId: unknown } }): Promise<RequestDataAsync<'/users/{id}', 'get'>> => ({
+  body: undefined,
+  params: { userId: await objectId.parseAsync(req.params.userId) },
+  query: undefined,
+});
+
+export const updateUser = async (req: {
+  body: unknown;
+  params: { userId: unknown };
+}): Promise<RequestDataAsync<'/users/{id}', 'put'>> => ({
+  body: await UpdateUserSchema.parseAsync(req.body),
+  params: { userId: await objectId.parseAsync(req.params.userId) },
+  query: undefined,
+});
+
+export const deleteUser = async (req: {
+  params: { userId: unknown };
+}): Promise<RequestDataAsync<'/users/{id}', 'delete'>> => ({
+  body: undefined,
+  params: { userId: await objectId.parseAsync(req.params.userId) },
+  query: undefined,
+});

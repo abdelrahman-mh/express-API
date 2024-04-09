@@ -1,44 +1,68 @@
-import Joi, { CustomHelpers, LanguageMessages } from 'joi';
-import { isValidObjectId } from 'mongoose';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { z } from 'zod';
+import { objectId } from './custom.validate';
+import { RequestDataAsync } from '../types/main';
 
-export const noteValidator = Joi.object({
-  title: Joi.string().min(3).max(50).required().messages({
-    'string.base': 'Title must be a string',
-    'string.empty': 'Title is required',
-    'string.min': 'Title must have at least {#limit} characters',
-    'string.max': 'Title cannot exceed {#limit} characters',
-    'any.required': 'Title is required',
-  }),
-  description: Joi.string().max(500).required().messages({
-    'string.base': 'Description must be a string',
-    'string.empty': 'Description is required',
-    'string.max': 'Description cannot exceed {#limit} characters',
-    'any.required': 'Description is required',
-  }),
-  complete: Joi.boolean().required().messages({
-    'boolean.base': 'Complete must be a boolean value',
-    'any.required': 'Complete status is required',
-  }),
-  userId: Joi.string()
-    .custom((value: string, helpers: CustomHelpers) => {
-      if (!isValidObjectId(value)) {
-        return helpers.message(<LanguageMessages>{
-          custom: 'Not Found!',
-        });
-      }
-      return value;
-    })
-    .required()
-    .messages({
-      'string.base': 'User ID must be a string',
-      'string.empty': 'User ID is required',
-      'any.required': 'User ID is required',
-    }),
-}).options({ stripUnknown: true, abortEarly: false });
+const NoteSchema = z.object({
+  content: z.string().min(1, { message: 'This field is required!' }),
+});
 
-// not extends userId
-export const noteUpdateValidate = Joi.object({
-  title: noteValidator.extract('title').optional(),
-  description: noteValidator.extract('description').optional(),
-  complete: noteValidator.extract('complete').optional(),
-}).options({ stripUnknown: true, abortEarly: false });
+const UpdateNoteSchema = z.object({
+  content: z.string().min(1, { message: 'This field is required!' }),
+  isComplete: z.boolean(),
+});
+
+// const GetNotesQuery = z.object({
+//   sortBy: z.string().optional(),
+//   projectBy: z.string().optional(),
+//   limit: z.number().int().optional(),
+//   page: z.number().int().optional(),
+// });
+
+export const createNote = async (req: { body: unknown }): Promise<RequestDataAsync<'/notes', 'post'>> => ({
+  body: await NoteSchema.parseAsync(req.body),
+  params: undefined,
+  query: undefined,
+});
+
+export const getNotes = async (_req?: unknown): Promise<RequestDataAsync<'/notes', 'get'>> => ({
+  body: undefined,
+  params: undefined,
+  query: undefined,
+});
+
+export const getNoteById = async (req: { params: { id: unknown } }): Promise<RequestDataAsync<'/notes/{id}', 'get'>> => ({
+  body: undefined,
+  params: { id: await objectId.parseAsync(req.params.id) },
+  query: undefined,
+});
+
+export const updateNote = async (req: {
+  body: unknown;
+  params: { id: unknown };
+}): Promise<RequestDataAsync<'/notes/{id}', 'put'>> => ({
+  body: await UpdateNoteSchema.parseAsync(req.body),
+  params: { id: await objectId.parseAsync(req.params.id) },
+  query: undefined,
+});
+
+export const deleteNote = async (req: { params: { id: unknown } }): Promise<RequestDataAsync<'/notes/{id}', 'delete'>> => ({
+  body: undefined,
+  params: { id: await objectId.parseAsync(req.params.id) },
+  query: undefined,
+});
+
+export const completeNote = async (req: {
+  params: { id: unknown };
+}): Promise<RequestDataAsync<'/notes/{id}/complete', 'post'>> => ({
+  body: undefined,
+  params: { id: await objectId.parseAsync(req.params.id) },
+  query: undefined,
+});
+export const unCompleteNote = async (req: {
+  params: { id: unknown };
+}): Promise<RequestDataAsync<'/notes/{id}/unComplete', 'post'>> => ({
+  body: undefined,
+  params: { id: await objectId.parseAsync(req.params.id) },
+  query: undefined,
+});
