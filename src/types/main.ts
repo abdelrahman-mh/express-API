@@ -8,14 +8,20 @@ import { components, paths } from './schema';
 type GetType<T extends keyof components['schemas']> = components['schemas'][T];
 
 export interface UserDocument extends Document {
+  id: string;
   name: string;
   email: string;
   password: string;
+  createdAt: string;
+  updatedAt: string;
 }
 export interface NoteDocument extends Document {
+  id: string;
   content: string;
   completed: boolean;
   userId: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type Note = GetType<'Note'>;

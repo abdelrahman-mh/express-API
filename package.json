@@ -12,8 +12,7 @@
     "test:integration": "npm run jest -- --config jest.config.integration.js",
     "jest": "NODE_ENV=test jest --verbose --runInBand",
     "test": "npm run test:unit && npm run test:integration",
-    "gen-oas": "openapi-typescript ./openapi.yaml -o ./src/types/schema.ts --enum",
-    "gen": "openapi-typescript -o ./src/types/schema.ts -n schema --empty-objects-unknown true --enum openapi.yaml"
+    "gen-oas": "openapi-typescript ./openapi.yaml -o ./src/types/schema.ts"
   },
   "keywords": [],
   "author": "",

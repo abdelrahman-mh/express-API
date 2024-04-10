@@ -549,7 +549,7 @@ export interface components {
              * @description ID of the user who owns the note
              * @example 507f191e810c19729de860ea
              */
-            userId: Record<string, never>;
+            userId: string;
             /**
              * @description Content of the note
              * @example Create app with Docker and docker-compose

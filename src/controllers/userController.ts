@@ -1,71 +1,70 @@
 import { NextFunction, Request, Response } from 'express';
-import { Types } from 'mongoose';
-import toNewUser from '../typeGuards/toNewUser';
-// import toNewUserUpdate from '../typeGuards/toNewUserUpdate';
-import { ValidUser } from '../types/User';
-import userServices from '../service/user.services';
-// import { AuthenticatedRequest } from '../middlewares/authMiddleware';
+import { ResponseData } from '../types/main';
+import boom from '@hapi/boom';
+import * as services from '../service/user.services';
+import * as parseRequest from '../validate/user.validate';
 
-const createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const userData = toNewUser(req.body);
-    const user = await userServices.createUser(userData);
+    const { body } = await parseRequest.createUser(req);
+    const user = await services.createUser(body);
 
-    const validUser: ValidUser = {
-      username: user.username,
-      email: user.email,
-      id: user.id as Types.ObjectId,
+    const response: ResponseData<'/users', 'post', 201> = {
+      statusCode: 201,
+      jsonContent: user,
     };
-
-    res.status(201).json(validUser);
+    res.status(response.statusCode).json(response.jsonContent);
   } catch (error) {
     next(error);
   }
 };
 
-// const updateUser = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
-//   const userId = String(req.user.id);
-//   try {
-//     const userData = toNewUserUpdate(req.body);
+export const updateUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const { params, body } = await parseRequest.updateUser({ params: { userId: req.params.id }, body: req.body });
+    const updatedUser = await services.updateUser({ userId: params.userId, updateData: body });
 
-//     const updatedUser = await userServices.updateUser(userId, userData); // this will return `null` if not found user!
+    if (!updatedUser) {
+      throw boom.notFound('User not found!');
+    }
 
-//     if (!updatedUser) {
-//       res.status(404).json({ error: 'notFound' });
-//       return;
-//     }
+    const response: ResponseData<'/users/{id}', 'put', 200> = {
+      statusCode: 200,
+      jsonContent: updatedUser,
+    };
 
-//     const validUser: ValidUser = {
-//       username: updatedUser.username,
-//       email: updatedUser.email,
-//       id: updatedUser.id as Types.ObjectId,
-//     };
+    res.status(response.statusCode).json(response.jsonContent);
+  } catch (error) {
+    next(error);
+  }
+};
 
-//     res.status(200).json(validUser);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+export const getUsers = async (_: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const users = await services.getUsers();
+    const response: ResponseData<'/users', 'get', 200> = {
+      statusCode: 200,
+      jsonContent: users,
+    };
+    res.status(response.statusCode).json(response.jsonContent);
+  } catch (error) {
+    next(error);
+  }
+};
+export const getUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { params } = await parseRequest.getUser({ params: { userId: req.params.id } });
+    const user = await services.getUserById(params.userId);
+    if (!user) {
+      throw boom.notFound('User not found!');
+    }
 
-// const getUsers = async (_: Request, res: Response, next: NextFunction): Promise<void> => {
-//   try {
-//     const users = await userServices.getUsers();
-//     res.status(200).json(users);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-// const getUser = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-//   const userId = String(req.user.id);
-//   try {
-//     const user = await userServices.getUserById(userId);
-//     if (!user) {
-//       return res.status(401).json({ error: 'notFound' });
-//     }
-//     return res.status(200).json(user);
-//   } catch (error) {
-//     return next(error);
-//   }
-// };
-const payload = { createUser };
-export default payload;
+    const response: ResponseData<'/users/{id}', 'get', 200> = {
+      statusCode: 200,
+      jsonContent: user,
+    };
+    return res.status(response.statusCode).json(response.jsonContent);
+  } catch (error) {
+    return next(error);
+  }
+};

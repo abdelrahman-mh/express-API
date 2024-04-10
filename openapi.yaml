@@ -430,7 +430,7 @@ components:
           example: 507f191e810c19729de860ea
           description: Unique identifier for the note
         userId:
-          type: objectId
+          type: string
           example: 507f191e810c19729de860ea
           description: ID of the user who owns the note
         content:

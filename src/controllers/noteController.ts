@@ -8,7 +8,7 @@ export const addNote = async (req: Request, res: Response, next: NextFunction): 
   try {
     const { body } = await parseRequest.createNote(req);
     const newNote = await services.addNote(body);
-
+    console.log('note', newNote);
     const response: ResponseData<'/notes', 'post', 201> = {
       statusCode: 201,
       jsonContent: newNote,

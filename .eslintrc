@@ -9,7 +9,7 @@
     "plugin:jest/recommended",
     "plugin:security/recommended",
   ],
-  "plugins": ["@typescript-eslint", "jest", "security", "prettier"],
+  "plugins": ["@typescript-eslint", "jest", "security", "airbnb-base", "prettier"],
   "env": {
     "browser": true,
     "es6": true,

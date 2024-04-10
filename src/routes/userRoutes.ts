@@ -1,12 +1,10 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import express from 'express';
-import userController from '../controllers/userController';
-import authorizationMiddleware from '../middlewares/authMiddleware';
+import * as userController from '../controllers/userController';
 const router = express.Router();
 
-router.get('/', authorizationMiddleware, userController.getUser);
-router.get('/all', authorizationMiddleware, userController.getUsers);
+router.get('/', userController.getUsers);
+router.get('/:id', userController.getUser);
 router.post('/', userController.createUser);
-router.put('/', authorizationMiddleware, userController.updateUser);
+router.put('/', userController.updateUser);
 
 export default router;

@@ -4,11 +4,11 @@ import toJSON from '../lib/toJSON';
 import bcrypt from 'bcrypt';
 import { UserDocument } from '../types/main';
 
-interface UserModel extends Model<UserDocument, UserModel> {
+interface UserModel extends Model<UserDocument> {
   isEmailTaken(email: string, excludeUserId?: mongoose.Types.ObjectId): Promise<boolean>;
 }
 
-const userSchema = new Schema<UserDocument>(
+const userSchema = new Schema<UserDocument, UserModel>(
   {
     name: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
