@@ -1,5 +1,6 @@
 import { GetType } from './main';
 import { Model, Document } from 'mongoose';
+import { AccessAndRefreshTokens } from './token.types';
 
 export type User = GetType<'User'>;
 export type NewUser = GetType<'NewUser'>;
@@ -23,4 +24,13 @@ export interface UserDocument extends UserSchema, Document {
 }
 export interface UserSchemaModel extends Model<UserDocument> {
   isEmailTaken(email: string, excludeUserId?: string): Promise<boolean>;
+}
+
+export type NewRegisteredUser = Omit<User, 'role' | 'isEmailVerified'>;
+
+export type NewCreatedUser = Omit<User, 'isEmailVerified'>;
+
+export interface UserWithTokens {
+  user: UserDocument;
+  tokens: AccessAndRefreshTokens;
 }

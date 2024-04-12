@@ -3,6 +3,14 @@ const allRoles = {
   admin: ['getUsers', 'manageUsers'],
 };
 
-export const roles: string[] = Object.keys(allRoles);
+// Exporting roles array, extracting keys from allRoles object
+export const roles = Object.keys(allRoles);
 console.log(roles);
-export const roleRights: Map<string, string[]> = new Map(Object.entries(allRoles));
+
+// Constructing a Map from allRoles where Object.entries is not used
+// export const roleRights = new Map(
+//   Object.keys(allRoles).map(key => [key, allRoles[key]])
+// );
+
+// // Testing the output
+// console.log(roleRights);

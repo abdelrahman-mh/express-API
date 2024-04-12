@@ -12,7 +12,7 @@ const userSchema = new Schema<UserDocument, UserSchemaModel>(
     role: {
       type: String,
       enum: Object.values(ROLES),
-      default: 'user',
+      default: ROLES.User,
     },
     isEmailVerified: {
       type: Boolean,

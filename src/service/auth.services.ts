@@ -2,18 +2,13 @@ import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import Token from '../token/token.model';
 import ApiError from '../errors/ApiError';
-import tokenTypes from '../token/token.types';
-import { getUserByEmail, getUserById, updateUserById } from '../user/user.service';
-import { IUserDoc, IUserWithTokens } from '../user/user.interfaces';
+import { getUserByEmail, getUserById, updateUserById } from './user.services';
+import { UserDocument, UserWithTokens } from 'types/user.types';
+import { TokensTypes } from 'types/token.types';
 import { generateAuthTokens, verifyToken } from '../token/token.service';
 
-/**
- * Login with username and password
- * @param {string} email
- * @param {string} password
- * @returns {Promise<IUserDoc>}
- */
-export const loginUserWithEmailAndPassword = async (email: string, password: string): Promise<IUserDoc> => {
+// Login with email and password
+export const loginLocal = async (email: string, password: string): Promise<UserDocument> => {
   const user = await getUserByEmail(email);
   if (!user || !(await user.isPasswordMatch(password))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect email or password');
@@ -27,7 +22,7 @@ export const loginUserWithEmailAndPassword = async (email: string, password: str
  * @returns {Promise<void>}
  */
 export const logout = async (refreshToken: string): Promise<void> => {
-  const refreshTokenDoc = await Token.findOne({ token: refreshToken, type: tokenTypes.REFRESH, blacklisted: false });
+  const refreshTokenDoc = await Token.findOne({ token: refreshToken, type: TokensTypes.REFRESH, blacklisted: false });
   if (!refreshTokenDoc) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Not found');
   }
@@ -39,10 +34,10 @@ export const logout = async (refreshToken: string): Promise<void> => {
  * @param {string} refreshToken
  * @returns {Promise<IUserWithTokens>}
  */
-export const refreshAuth = async (refreshToken: string): Promise<IUserWithTokens> => {
+export const refreshAuth = async (refreshToken: string): Promise<UserWithTokens> => {
   try {
-    const refreshTokenDoc = await verifyToken(refreshToken, tokenTypes.REFRESH);
-    const user = await getUserById(new mongoose.Types.ObjectId(refreshTokenDoc.user));
+    const refreshTokenDoc = await verifyToken(refreshToken, TokensTypes.REFRESH);
+    const user = await getUserById(refreshTokenDoc.user);
     if (!user) {
       throw new Error();
     }

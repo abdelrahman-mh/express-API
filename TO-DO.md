@@ -1,10 +1,10 @@
 ### Security
 
-- [ ] Implement best practices for CORS & Helmet middleware.
-- [ ] Implement Content Security Policy (CSP) headers to prevent XSS, clickjacking, and other code injection attacks.
+- [ ] Implement best practices for `CORS` & `Helmet` middleware.
+- [ ] Implement Content Security Policy `(CSP)` headers to prevent XSS, clickjacking, and other code injection attacks.
 - [ ] Utilize a Web Application Firewall (WAF) for additional security measures.
 - [ ] Integrate npm package [validator](https://www.npmjs.com/package/validator) for input validation and security.
-- [ ] Use express-mongo-sanitize
+- [ ] Use `express-mongo-sanitize`
 
 ### Application Build
 
@@ -16,7 +16,7 @@
 - [ ] Implement unit tests, integration tests, and end-to-end tests to ensure code quality and reliability.
 - [ ] Set up CI/CD pipelines using Github Actions.
 
-- [ ] Implement OAuth2, with Google, Github, X
+- [ ] Implement OAuth2, with `Google`, `Github`, `X`
 
 ### Performance & Enhancement
 
