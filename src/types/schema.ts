@@ -3,733 +3,500 @@
  * Do not make direct changes to the file.
  */
 
+
 export interface paths {
-    "/signup": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+  "/signup": {
+    /** User Sign-Up */
+    post: {
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["SignUpCredential"];
         };
-        get?: never;
-        put?: never;
-        /** User Sign-Up */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["SignUpCredential"];
-                };
-            };
-            responses: {
-                /** @description User created successfully */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                400: components["responses"]["BadRequest"];
-                409: components["responses"]["ConflictError"];
-                500: components["responses"]["InternalServerError"];
-            };
+      };
+      responses: {
+        /** @description User created successfully */
+        201: {
+          content: never;
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        400: components["responses"]["BadRequest"];
+        409: components["responses"]["ConflictError"];
+        500: components["responses"]["InternalServerError"];
+      };
     };
-    "/login": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+  };
+  "/login": {
+    /** User Login */
+    post: {
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["LoginCredential"];
         };
-        get?: never;
-        put?: never;
-        /** User Login */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
+      };
+      responses: {
+        /** @description User logged in successfully */
+        200: {
+          content: {
+            "application/json": {
+              /** @description JWT token for authentication */
+              token?: string;
             };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["LoginCredential"];
-                };
-            };
-            responses: {
-                /** @description User logged in successfully */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /** @description JWT token for authentication */
-                            token?: string;
-                        };
-                    };
-                };
-                400: components["responses"]["BadRequest"];
-                401: components["responses"]["AuthenticationError"];
-                500: components["responses"]["InternalServerError"];
-            };
+          };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        400: components["responses"]["BadRequest"];
+        401: components["responses"]["AuthenticationError"];
+        500: components["responses"]["InternalServerError"];
+      };
     };
-    "/notes": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+  };
+  "/notes": {
+    /** Get all notes */
+    get: {
+      responses: {
+        /** @description OK */
+        200: {
+          content: {
+            "application/json": components["schemas"]["Note"][];
+          };
         };
-        /** Get all notes */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Note"][];
-                    };
-                };
-                401: components["responses"]["AuthenticationError"];
-                500: components["responses"]["InternalServerError"];
-            };
-        };
-        put?: never;
-        /** Create a new note */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["NewNote"];
-                };
-            };
-            responses: {
-                /** @description Note created successfully */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Note"];
-                    };
-                };
-                400: components["responses"]["BadRequest"];
-                401: components["responses"]["AuthenticationError"];
-                500: components["responses"]["InternalServerError"];
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        401: components["responses"]["AuthenticationError"];
+        500: components["responses"]["InternalServerError"];
+      };
     };
-    "/notes/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    /** Create a new note */
+    post: {
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["NewNote"];
         };
-        /** Retrieve a note by ID */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description ID of the note to retrieve */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Successful operation */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Note"];
-                    };
-                };
-                401: components["responses"]["AuthenticationError"];
-                404: components["responses"]["ResourceNotFoundError"];
-                500: components["responses"]["InternalServerError"];
-            };
+      };
+      responses: {
+        /** @description Note created successfully */
+        201: {
+          content: {
+            "application/json": components["schemas"]["Note"];
+          };
         };
-        /** Update a note */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description ID of the note to update */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["UpdateNote"];
-                };
-            };
-            responses: {
-                /** @description Note updated successfully */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Note"];
-                    };
-                };
-                400: components["responses"]["BadRequest"];
-                401: components["responses"]["AuthenticationError"];
-                404: components["responses"]["ResourceNotFoundError"];
-                500: components["responses"]["InternalServerError"];
-            };
-        };
-        post?: never;
-        /** Delete a note */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description ID of the note to delete */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Note deleted successfully */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                401: components["responses"]["AuthenticationError"];
-                404: components["responses"]["ResourceNotFoundError"];
-                500: components["responses"]["InternalServerError"];
-            };
-        };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        400: components["responses"]["BadRequest"];
+        401: components["responses"]["AuthenticationError"];
+        500: components["responses"]["InternalServerError"];
+      };
     };
-    "/notes/{id}/complete": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+  };
+  "/notes/{id}": {
+    /** Retrieve a note by ID */
+    get: {
+      parameters: {
+        path: {
+          /** @description ID of the note to retrieve */
+          id: string;
         };
-        get?: never;
-        put?: never;
-        /** Mark a note as complete */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description ID of the note to mark as complete */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Note marked as complete successfully */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /** @description Indicates whether the note is completed or not */
-                            completed: string;
-                        };
-                    };
-                };
-                401: components["responses"]["AuthenticationError"];
-                404: components["responses"]["ResourceNotFoundError"];
-                500: components["responses"]["InternalServerError"];
-            };
+      };
+      responses: {
+        /** @description Successful operation */
+        200: {
+          content: {
+            "application/json": components["schemas"]["Note"];
+          };
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        401: components["responses"]["AuthenticationError"];
+        404: components["responses"]["ResourceNotFoundError"];
+        500: components["responses"]["InternalServerError"];
+      };
     };
-    "/notes/{id}/unComplete": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    /** Update a note */
+    put: {
+      parameters: {
+        path: {
+          /** @description ID of the note to update */
+          id: string;
         };
-        get?: never;
-        put?: never;
-        /** Mark a note as incomplete */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description ID of the note to mark as incomplete */
-                    id: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Note marked as incomplete successfully */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            /** @description Indicates whether the note is completed or not */
-                            cancel_complete: string;
-                        };
-                    };
-                };
-            };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["UpdateNote"];
         };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+      };
+      responses: {
+        /** @description Note updated successfully */
+        200: {
+          content: {
+            "application/json": components["schemas"]["Note"];
+          };
+        };
+        400: components["responses"]["BadRequest"];
+        401: components["responses"]["AuthenticationError"];
+        404: components["responses"]["ResourceNotFoundError"];
+        500: components["responses"]["InternalServerError"];
+      };
     };
-    "/users": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    /** Delete a note */
+    delete: {
+      parameters: {
+        path: {
+          /** @description ID of the note to delete */
+          id: string;
         };
-        /** Get rows users */
-        get: {
-            parameters: {
-                query?: {
-                    name?: string;
-                    role?: string;
-                    sortBy?: string;
-                    projectBy?: string;
-                    limit?: number;
-                    page?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description success get users */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["User"][];
-                    };
-                };
-                401: components["responses"]["AuthenticationError"];
-                500: components["responses"]["InternalServerError"];
-            };
+      };
+      responses: {
+        /** @description Note deleted successfully */
+        204: {
+          content: never;
         };
-        put?: never;
-        /** Create a new user */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["NewUser"];
-                };
-            };
-            responses: {
-                /** @description User created successfully */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["User"];
-                    };
-                };
-                400: components["responses"]["BadRequest"];
-                500: components["responses"]["InternalServerError"];
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        401: components["responses"]["AuthenticationError"];
+        404: components["responses"]["ResourceNotFoundError"];
+        500: components["responses"]["InternalServerError"];
+      };
     };
-    "/users/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+  };
+  "/notes/{id}/complete": {
+    /** Mark a note as complete */
+    post: {
+      parameters: {
+        path: {
+          /** @description ID of the note to mark as complete */
+          id: string;
         };
-        /** Retrieve a user by ID */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description ID of the user to retrieve */
-                    userId: string;
-                };
-                cookie?: never;
+      };
+      responses: {
+        /** @description Note marked as complete successfully */
+        200: {
+          content: {
+            "application/json": {
+              /** @description Indicates whether the note is completed or not */
+              completed: string;
             };
-            requestBody?: never;
-            responses: {
-                /** @description Successful operation */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["User"];
-                    };
-                };
-                404: components["responses"]["ResourceNotFoundError"];
-                500: components["responses"]["InternalServerError"];
-            };
+          };
         };
-        /** Update a user */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description ID of the user to update */
-                    userId: string;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["UpdateUser"];
-                };
-            };
-            responses: {
-                /** @description User updated successfully */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["User"];
-                    };
-                };
-                400: components["responses"]["BadRequest"];
-                404: components["responses"]["ResourceNotFoundError"];
-                500: components["responses"]["InternalServerError"];
-            };
-        };
-        post?: never;
-        /**
-         * Delete a user
-         * @description Deletes the user identified by the userId parameter.
-         */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    /** @description ID of the user to delete */
-                    userId: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description User deleted successfully */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                404: components["responses"]["ResourceNotFoundError"];
-                500: components["responses"]["InternalServerError"];
-            };
-        };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+        401: components["responses"]["AuthenticationError"];
+        404: components["responses"]["ResourceNotFoundError"];
+        500: components["responses"]["InternalServerError"];
+      };
     };
+  };
+  "/notes/{id}/unComplete": {
+    /** Mark a note as incomplete */
+    post: {
+      parameters: {
+        path: {
+          /** @description ID of the note to mark as incomplete */
+          id: string;
+        };
+      };
+      responses: {
+        /** @description Note marked as incomplete successfully */
+        200: {
+          content: {
+            "application/json": {
+              /** @description Indicates whether the note is completed or not */
+              cancel_complete: string;
+            };
+          };
+        };
+      };
+    };
+  };
+  "/users": {
+    /** Get rows users */
+    get: {
+      parameters: {
+        query?: {
+          name?: string;
+          role?: string;
+          sortBy?: string;
+          projectBy?: string;
+          limit?: number;
+          page?: number;
+        };
+      };
+      responses: {
+        /** @description success get users */
+        200: {
+          content: {
+            "application/json": components["schemas"]["User"][];
+          };
+        };
+        401: components["responses"]["AuthenticationError"];
+        500: components["responses"]["InternalServerError"];
+      };
+    };
+    /** Create a new user */
+    post: {
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["NewUser"];
+        };
+      };
+      responses: {
+        /** @description User created successfully */
+        201: {
+          content: {
+            "application/json": components["schemas"]["User"];
+          };
+        };
+        400: components["responses"]["BadRequest"];
+        500: components["responses"]["InternalServerError"];
+      };
+    };
+  };
+  "/users/{id}": {
+    /** Retrieve a user by ID */
+    get: {
+      parameters: {
+        path: {
+          /** @description ID of the user to retrieve */
+          userId: string;
+        };
+      };
+      responses: {
+        /** @description Successful operation */
+        200: {
+          content: {
+            "application/json": components["schemas"]["User"];
+          };
+        };
+        404: components["responses"]["ResourceNotFoundError"];
+        500: components["responses"]["InternalServerError"];
+      };
+    };
+    /** Update a user */
+    put: {
+      parameters: {
+        path: {
+          /** @description ID of the user to update */
+          userId: string;
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["UpdateUser"];
+        };
+      };
+      responses: {
+        /** @description User updated successfully */
+        200: {
+          content: {
+            "application/json": components["schemas"]["User"];
+          };
+        };
+        400: components["responses"]["BadRequest"];
+        404: components["responses"]["ResourceNotFoundError"];
+        500: components["responses"]["InternalServerError"];
+      };
+    };
+    /**
+     * Delete a user
+     * @description Deletes the user identified by the userId parameter.
+     */
+    delete: {
+      parameters: {
+        path: {
+          /** @description ID of the user to delete */
+          userId: string;
+        };
+      };
+      responses: {
+        /** @description User deleted successfully */
+        204: {
+          content: never;
+        };
+        404: components["responses"]["ResourceNotFoundError"];
+        500: components["responses"]["InternalServerError"];
+      };
+    };
+  };
 }
+
 export type webhooks = Record<string, never>;
+
 export interface components {
-    schemas: {
-        SignUpCredential: {
-            /**
-             * Format: email
-             * @description Email address of the user
-             * @example john@example.com
-             */
-            email: string;
-            /**
-             * @description Password of the user
-             * @example Test-$1234
-             */
-            password: string;
-        };
-        LoginCredential: {
-            /**
-             * Format: email
-             * @description Email address of the user
-             * @example john@example.com
-             */
-            email: string;
-            /**
-             * @description Password of the user
-             * @example Test-$1234
-             */
-            password: string;
-        };
-        Note: {
-            /**
-             * Format: objectId
-             * @description Unique identifier for the note
-             * @example 507f191e810c19729de860ea
-             */
-            id: string;
-            /**
-             * @description ID of the user who owns the note
-             * @example 507f191e810c19729de860ea
-             */
-            userId: string;
-            /**
-             * @description Content of the note
-             * @example Create app with Docker and docker-compose
-             */
-            content: string;
-            /**
-             * @description Indicates whether the note is completed
-             * @example true
-             */
-            completed: boolean;
-            /**
-             * Format: date-time
-             * @description Date and time when the note was created
-             * @example 2022-04-05T10:15:30Z
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @description Date and time when the note was last updated
-             * @example 2022-04-05T10:15:30Z
-             */
-            updatedAt: string;
-        };
-        NewNote: {
-            /** @description Content of the new note */
-            content: string;
-        };
-        UpdateNote: {
-            /** @description New content of the note */
-            content?: string;
-            /** @description New completion status of the note */
-            completed?: boolean;
-        };
-        NewUser: {
-            /**
-             * @description Name of the user
-             * @example John Due
-             */
-            name: string;
-            /**
-             * Format: email
-             * @description Email address of the user
-             * @example john@example.com
-             */
-            email: string;
-            /**
-             * @description Password of the user
-             * @example Test-$$123
-             */
-            password: string;
-        };
-        UpdateUser: {
-            /**
-             * @description New name of the user
-             * @example John Due
-             */
-            name?: string;
-            /**
-             * @description New password of the user
-             * @example Test-$$123
-             */
-            password?: string;
-        };
-        User: {
-            /**
-             * Format: objectId
-             * @description Unique identifier for the user
-             * @example 507f191e810c19729de860ea
-             */
-            id: string;
-            /**
-             * @description Name of the user
-             * @example John Due
-             */
-            name: string;
-            /**
-             * Format: email
-             * @description Email address of the user
-             * @example john@example.com
-             */
-            email: string;
-            /**
-             * Format: date-time
-             * @description Date and time when the user was created
-             * @example 2022-04-05T10:15:30Z
-             */
-            createdAt: string;
-            /**
-             * Format: date-time
-             * @description Date and time when the user was last updated
-             * @example 2022-04-05T10:15:30Z
-             */
-            updatedAt: string;
-        };
-        BaseError: {
-            /** @example The HTTP status message */
-            error: string;
-            /** @example The ERROR message */
-            message: string;
-        };
-        DetailsError: {
-            /** @example fieldName */
-            field: string;
-            /** @example This field already exist!. */
-            message?: string;
-        };
+  schemas: {
+    SignUpCredential: {
+      /**
+       * Format: email
+       * @description Email address of the user
+       * @example john@example.com
+       */
+      email: string;
+      /**
+       * @description Password of the user
+       * @example Test-$1234
+       */
+      password: string;
     };
-    responses: {
-        /** @description Bad request error */
-        BadRequest: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": components["schemas"]["BaseError"] & {
-                    data: components["schemas"]["DetailsError"][];
-                };
-            };
-        };
-        /** @description Authentication failed error */
-        AuthenticationError: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": components["schemas"]["BaseError"];
-            };
-        };
-        /** @description Authorization error */
-        AuthorizationError: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": components["schemas"]["BaseError"];
-            };
-        };
-        /** @description Conflict Error */
-        ConflictError: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": components["schemas"]["BaseError"] & {
-                    data: components["schemas"]["DetailsError"][];
-                };
-            };
-        };
-        /** @description Resource not found error */
-        ResourceNotFoundError: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": components["schemas"]["BaseError"] & Record<string, never>;
-            };
-        };
-        /** @description Internal server error */
-        InternalServerError: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": components["schemas"]["BaseError"];
-            };
-        };
-        /** @description Rate limit exceeded error */
-        RateLimitExceededError: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": components["schemas"]["BaseError"] & Record<string, never>;
-            };
-        };
+    LoginCredential: {
+      /**
+       * Format: email
+       * @description Email address of the user
+       * @example john@example.com
+       */
+      email: string;
+      /**
+       * @description Password of the user
+       * @example Test-$1234
+       */
+      password: string;
     };
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+    Note: {
+      /**
+       * Format: objectId
+       * @description Unique identifier for the note
+       * @example 507f191e810c19729de860ea
+       */
+      id: string;
+      /**
+       * @description ID of the user who owns the note
+       * @example 507f191e810c19729de860ea
+       */
+      userId: string;
+      /**
+       * @description Content of the note
+       * @example Create app with Docker and docker-compose
+       */
+      content: string;
+      /**
+       * @description Indicates whether the note is completed
+       * @example true
+       */
+      completed: boolean;
+    };
+    NewNote: {
+      /** @description Content of the new note */
+      content: string;
+    };
+    UpdateNote: {
+      /** @description New content of the note */
+      content?: string;
+      /** @description New completion status of the note */
+      completed?: boolean;
+    };
+    NewUser: {
+      /**
+       * @description Name of the user
+       * @example John Due
+       */
+      name: string;
+      /**
+       * Format: email
+       * @description Email address of the user
+       * @example john@example.com
+       */
+      email: string;
+      /**
+       * @description Password of the user
+       * @example Test-$$123
+       */
+      password: string;
+    };
+    UpdateUser: {
+      /**
+       * @description New name of the user
+       * @example John Due
+       */
+      name?: string;
+      /**
+       * @description New password of the user
+       * @example Test-$$123
+       */
+      password?: string;
+    };
+    User: {
+      /**
+       * Format: objectId
+       * @description Unique identifier for the user
+       * @example 507f191e810c19729de860ea
+       */
+      id: string;
+      /**
+       * @description Name of the user
+       * @example John Due
+       */
+      name: string;
+      /**
+       * Format: email
+       * @description Email address of the user
+       * @example john@example.com
+       */
+      email: string;
+      /**
+       * @description User role
+       * @example User
+       */
+      role: string;
+      /**
+       * @description User email verified status!
+       * @example true
+       */
+      isEmailVerified: boolean;
+    };
+    BaseError: {
+      /** @example The HTTP status message */
+      error: string;
+      /** @example The ERROR message */
+      message: string;
+    };
+    DetailsError: {
+      /** @example fieldName */
+      field: string;
+      /** @example This field already exist!. */
+      message?: string;
+    };
+  };
+  responses: {
+    /** @description Bad request error */
+    BadRequest: {
+      content: {
+        "application/json": components["schemas"]["BaseError"] & {
+          data: components["schemas"]["DetailsError"][];
+        };
+      };
+    };
+    /** @description Authentication failed error */
+    AuthenticationError: {
+      content: {
+        "application/json": components["schemas"]["BaseError"];
+      };
+    };
+    /** @description Authorization error */
+    AuthorizationError: {
+      content: {
+        "application/json": components["schemas"]["BaseError"];
+      };
+    };
+    /** @description Conflict Error */
+    ConflictError: {
+      content: {
+        "application/json": components["schemas"]["BaseError"] & {
+          data: components["schemas"]["DetailsError"][];
+        };
+      };
+    };
+    /** @description Resource not found error */
+    ResourceNotFoundError: {
+      content: {
+        "application/json": components["schemas"]["BaseError"] & Record<string, never>;
+      };
+    };
+    /** @description Internal server error */
+    InternalServerError: {
+      content: {
+        "application/json": components["schemas"]["BaseError"];
+      };
+    };
+    /** @description Rate limit exceeded error */
+    RateLimitExceededError: {
+      content: {
+        "application/json": components["schemas"]["BaseError"] & Record<string, never>;
+      };
+    };
+  };
+  parameters: never;
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
 }
+
 export type $defs = Record<string, never>;
+
+export type external = Record<string, never>;
+
 export type operations = Record<string, never>;

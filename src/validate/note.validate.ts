@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { z } from 'zod';
 import { objectId } from './custom.validate';
 import { RequestDataAsync } from '../types/main';
@@ -25,7 +24,7 @@ export const createNote = async (req: { body: unknown }): Promise<RequestDataAsy
   query: undefined,
 });
 
-export const getNotes = async (_req?: unknown): Promise<RequestDataAsync<'/notes', 'get'>> => ({
+export const getNotes = async (): Promise<RequestDataAsync<'/notes', 'get'>> => ({
   body: undefined,
   params: undefined,
   query: undefined,

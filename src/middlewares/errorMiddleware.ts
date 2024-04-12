@@ -69,7 +69,7 @@ const errorHandler = (err: unknown, req: Request, res: Response, next: NextFunct
   // }
 
   res.status(400).json(err);
-  // next();
+  next();
 };
 
 export default errorHandler;

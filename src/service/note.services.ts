@@ -1,5 +1,5 @@
-import NoteModel from '../models/Note';
-import { NewNote, Note, UpdateNote } from '../types/main';
+import NoteModel from '../models/note.model';
+import { NewNote, Note, UpdateNote } from '../types/notes.types';
 
 export async function addNote(newNote: NewNote) {
   const note = new NoteModel(newNote);

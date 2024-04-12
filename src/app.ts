@@ -1,20 +1,24 @@
 import dotenv from 'dotenv';
-import express from 'express';
-import morgan from 'morgan';
-import swaggerUi from 'swagger-ui-express';
-import notesRoutes from './routes/noteRoutes';
-import apiDocsRoute from './routes/docs.router';
-import usersRoutes from './routes/userRoutes';
-// import authRoutes from './routes/authRoutes';
-import errorHandler from './middlewares/errorMiddleware';
-// import authMiddleware from './middlewares/authMiddleware';
-
 dotenv.config();
+import express from 'express';
+import config from './utils/config';
+import swaggerUi from 'swagger-ui-express';
+import notesRoutes from './routes/v1/noteRoutes';
+import apiDocsRoute from './routes/v1/docs.router';
+import { successMorganHandler, errorMorganHandler } from './utils/logger';
+import usersRoutes from './routes/v1/userRoutes';
+import errorHandler from './middlewares/errorMiddleware';
+
 const app = express();
+
+// Logger
+if (config.env !== 'test') {
+  app.use(successMorganHandler);
+  app.use(errorMorganHandler);
+}
 
 // middleware
 app.use(express.json());
-app.use(morgan('dev'));
 app.use('/docs', swaggerUi.serve);
 
 // routes

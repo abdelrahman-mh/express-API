@@ -1,41 +1,10 @@
-import { NextFunction } from 'express';
-import { Model } from 'mongoose';
 import { components, paths } from './schema';
 
-//---------------------------------
-// Schema Types
-//---------------------------------
-type GetType<T extends keyof components['schemas']> = components['schemas'][T];
-
-export interface UserDocument extends Document {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  createdAt: string;
-  updatedAt: string;
-}
-export interface NoteDocument extends Document {
-  id: string;
-  content: string;
-  completed: boolean;
-  userId: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export type Note = GetType<'Note'>;
-export type NewNote = GetType<'NewNote'>;
-export type UpdateNote = GetType<'UpdateNote'>;
-
-export type User = GetType<'User'>;
-export type NewUser = GetType<'NewUser'>;
-export type UpdateUser = GetType<'UpdateUser'>;
+export type GetType<T extends keyof components['schemas']> = components['schemas'][T];
 
 //---------------------------------
 // Requests & Responses
 //---------------------------------
-
 type StatusCodesResponses<T extends keyof paths, A extends keyof paths[T]> = 'responses' extends keyof paths[T][A]
   ? paths[T][A]['responses']
   : never;
@@ -43,8 +12,8 @@ type StatusCodesResponses<T extends keyof paths, A extends keyof paths[T]> = 're
 type API<T extends keyof paths, A extends keyof paths[T], S extends keyof StatusCodesResponses<T, A> = never> = {
   parameters: 'parameters' extends keyof paths[T][A]
     ? {
-        path: 'path' extends keyof paths[T][A]['parameters'] ? paths[T][A]['parameters']['path'] : never;
-        query: 'query' extends keyof paths[T][A]['parameters'] ? paths[T][A]['parameters']['query'] : never;
+        path: 'path' extends keyof paths[T][A]['parameters'] ? paths[T][A]['parameters']['path'] : undefined;
+        query: 'query' extends keyof paths[T][A]['parameters'] ? paths[T][A]['parameters']['query'] : undefined;
       }
     : never;
   requestBody: 'requestBody' extends keyof paths[T][A]
@@ -85,5 +54,3 @@ export type ResponseData<T extends keyof paths, A extends keyof paths[T], S exte
   A,
   S
 >['responses'];
-
-export type Controller = (path: keyof paths) => (req: Request, res: Response, next: NextFunction) => Promise<void>;

@@ -10,6 +10,6 @@ const openApiPath = path.resolve(__dirname, '../../openapi.yaml');
 const openApiSpec = YAML.load(openApiPath);
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-router.get('/docs', swaggerUi.setup(openApiSpec));
+router.get('/', swaggerUi.setup(openApiSpec));
 
 export default router;

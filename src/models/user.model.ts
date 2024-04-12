@@ -1,24 +1,29 @@
-import mongoose, { model, Model, Schema } from 'mongoose';
+import mongoose, { model, Schema } from 'mongoose';
 import { hashPassword } from '../utils/helper';
 import toJSON from '../lib/toJSON';
 import bcrypt from 'bcrypt';
-import { UserDocument } from '../types/main';
+import { UserDocument, UserSchemaModel, ROLES } from '../types/user.types';
 
-interface UserModel extends Model<UserDocument> {
-  isEmailTaken(email: string, excludeUserId?: mongoose.Types.ObjectId): Promise<boolean>;
-}
-
-const userSchema = new Schema<UserDocument, UserModel>(
+const userSchema = new Schema<UserDocument, UserSchemaModel>(
   {
     name: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    role: {
+      type: String,
+      enum: Object.values(ROLES),
+      default: 'user',
+    },
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
     versionKey: false,
     minimize: false,
-  },
+  }
 );
 
 userSchema.plugin(toJSON);
@@ -29,8 +34,7 @@ userSchema.static('isEmailTaken', async function (email: string, excludeUserId: 
 });
 
 userSchema.method('isPasswordMatch', async function (password: string): Promise<boolean> {
-  const user = this;
-  return bcrypt.compare(password, user.password);
+  return bcrypt.compare(password, this.password);
 });
 
 userSchema.pre('save', async function (next) {
@@ -45,6 +49,6 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-const UserModel = model<UserDocument, UserModel>('User', userSchema);
+const UserModel = model<UserDocument, UserSchemaModel>('User', userSchema);
 
 export default UserModel;

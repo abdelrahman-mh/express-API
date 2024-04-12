@@ -249,7 +249,7 @@ paths:
         $ref: '#/components/responses/ResourceNotFoundError'
       '500':
         $ref: '#/components/responses/InternalServerError'
-        
+
   /users:
     post:
       summary: Create a new user
@@ -441,16 +441,16 @@ components:
           type: boolean
           example: true
           description: Indicates whether the note is completed
-        createdAt:
-          type: string
-          format: date-time
-          example: '2022-04-05T10:15:30Z'
-          description: Date and time when the note was created
-        updatedAt:
-          type: string
-          format: date-time
-          example: '2022-04-05T10:15:30Z'
-          description: Date and time when the note was last updated
+        # createdAt:
+        #   type: string
+        #   format: date-time
+        #   example: '2022-04-05T10:15:30Z'
+        #   description: Date and time when the note was created
+        # updatedAt:
+        #   type: string
+        #   format: date-time
+        #   example: '2022-04-05T10:15:30Z'
+        #   description: Date and time when the note was last updated
       required:
         - id
         - userId
@@ -528,22 +528,32 @@ components:
           format: email
           example: john@example.com
           description: Email address of the user
-        createdAt:
+        role:
           type: string
-          format: date-time
-          example: '2022-04-05T10:15:30Z'
-          description: Date and time when the user was created
-        updatedAt:
-          type: string
-          format: date-time
-          example: '2022-04-05T10:15:30Z'
-          description: Date and time when the user was last updated
+          example: User
+          description: User role
+        isEmailVerified:
+          type: boolean
+          example: true
+          description: User email verified status!
+        # createdAt:
+        #   type: string
+        #   format: date-time
+        #   example: '2022-04-05T10:15:30Z'
+        #   description: Date and time when the user was created
+        # updatedAt:
+        #   type: string
+        #   format: date-time
+        #   example: '2022-04-05T10:15:30Z'
+        #   description: Date and time when the user was last updated
       required:
         - id
         - name
         - email
         - createdAt
         - updatedAt
+        - role
+        - isEmailVerified
 
     BaseError:
       type: object

@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import { ResponseData } from '../types/main';
 import boom from '@hapi/boom';
 import * as services from '../service/user.services';
 import * as parseRequest from '../validate/user.validate';
@@ -9,11 +8,7 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
     const { body } = await parseRequest.createUser(req);
     const user = await services.createUser(body);
 
-    const response: ResponseData<'/users', 'post', 201> = {
-      statusCode: 201,
-      jsonContent: user,
-    };
-    res.status(response.statusCode).json(response.jsonContent);
+    res.status(201).json(user);
   } catch (error) {
     next(error);
   }
@@ -28,12 +23,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
       throw boom.notFound('User not found!');
     }
 
-    const response: ResponseData<'/users/{id}', 'put', 200> = {
-      statusCode: 200,
-      jsonContent: updatedUser,
-    };
-
-    res.status(response.statusCode).json(response.jsonContent);
+    res.status(200).json(updatedUser);
   } catch (error) {
     next(error);
   }
@@ -42,11 +32,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
 export const getUsers = async (_: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const users = await services.getUsers();
-    const response: ResponseData<'/users', 'get', 200> = {
-      statusCode: 200,
-      jsonContent: users,
-    };
-    res.status(response.statusCode).json(response.jsonContent);
+    res.status(200).json(users);
   } catch (error) {
     next(error);
   }
@@ -59,11 +45,7 @@ export const getUser = async (req: Request, res: Response, next: NextFunction) =
       throw boom.notFound('User not found!');
     }
 
-    const response: ResponseData<'/users/{id}', 'get', 200> = {
-      statusCode: 200,
-      jsonContent: user,
-    };
-    return res.status(response.statusCode).json(response.jsonContent);
+    return res.status(200).json(user);
   } catch (error) {
     return next(error);
   }

@@ -1,25 +1,36 @@
-import UserModel from '../models/User';
-import { NewUser, User , UserDocument} from '../types/main';
+import UserModel from '../models/user.model';
+import { NewUser, UpdateUser, UserDocument } from '../types/user.types';
+import boom from '@hapi/boom';
 
 export async function createUser(newUser: NewUser): Promise<UserDocument> {
-  const user = new UserModel(newUser);
-  await user.save();
+  const { email } = newUser;
+  const emailTaken = await UserModel.isEmailTaken(email);
+  if (emailTaken) {
+    throw boom.badRequest('Email already taken');
+  }
+  const user = await UserModel.create(newUser);
   return user;
 }
 
-export async function updateUser({ userId, updateData }: { userId: string; updateData: Partial<NewUser> }) {
-  const updatedUser = await UserModel.findByIdAndUpdate(userId, updateData);
+export const getUserById = async (id: string): Promise<UserDocument | null> => UserModel.findById(id);
+
+export const getUserByEmail = async (email: string): Promise<UserDocument | null> => UserModel.findOne({ email });
+
+export const updateUserById = async (userId: string, updateBody: UpdateUser): Promise<UserDocument | null> => {
+  const user = await getUserById(userId);
+  if (!user) {
+    throw boom.notFound('User not found!');
+  }
+  const updatedUser = Object.assign(user, updateBody);
+  await updatedUser.save();
   return updatedUser;
-}
-export async function getUsers() {
-  const users = await UserModel.find({});
-  return users;
-}
-export async function getUserById(userId: string) {
-  const user = await UserModel.findById(userId);
+};
+
+export const deleteUserById = async (userId: string): Promise<UserDocument | null> => {
+  const user = await getUserById(userId);
+  if (!user) {
+    throw boom.notFound('User not found!');
+  }
+  await user.deleteOne();
   return user;
-}
-export async function findUser(email: string) {
-  const user = await UserModel.findOne({ email });
-  return user;
-}
+};

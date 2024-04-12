@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable consistent-return */
-/* eslint-disable security/detect-object-injection */
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Document } from 'mongoose';

@@ -4,6 +4,7 @@
 - [ ] Implement Content Security Policy (CSP) headers to prevent XSS, clickjacking, and other code injection attacks.
 - [ ] Utilize a Web Application Firewall (WAF) for additional security measures.
 - [ ] Integrate npm package [validator](https://www.npmjs.com/package/validator) for input validation and security.
+- [ ] Use express-mongo-sanitize
 
 ### Application Build
 
@@ -14,6 +15,8 @@
 - [ ] Set up Docker & Docker Compose.
 - [ ] Implement unit tests, integration tests, and end-to-end tests to ensure code quality and reliability.
 - [ ] Set up CI/CD pipelines using Github Actions.
+
+- [ ] Implement OAuth2, with Google, Github, X
 
 ### Performance & Enhancement
 
@@ -39,3 +42,6 @@
 
 - [ ] Ensure all functions are asynchronous for improved single-thread performance.
 - [ ] Implement compression and adhere to Express best practices for production deployment.
+- [ ] Implement multi thread & use PM2
+- [ ] Handle App crash, you can see [This](https://blog.heroku.com/best-practices-nodejs-errors)
+- [ ] Better logger setup for production to `winston` and `morgan`
